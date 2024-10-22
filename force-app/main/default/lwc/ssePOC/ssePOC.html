@@ -1,0 +1,54 @@
+<template>
+    <lightning-card title={cardTitle}>
+        <div class="slds-var-m-around_small">
+            <lightning-card title="Select a source">
+                <lightning-radio-group lwc:ref="sourceSelector"
+                    name="source"
+                    type="button"
+                    options={sourceOptions}
+                    value={sourceUrl}
+                    onchange={handleSourceChange}
+                    disabled={listening}
+                ></lightning-radio-group>
+            </lightning-card>
+            <lightning-card lwc:if={source}>
+                <ul>
+                    <li>{sourceUrl}</li>
+                    <li>withCredentials: {sourceWithCredentials}</li>
+                    <li>readyState: {sourceReadyState}</li>
+                </ul>
+            </lightning-card>
+            <ul>
+                <template for:each={messages} for:item="message">
+                    <li key={message.i}>{message.id} {message.data}</li>
+                </template>
+            </ul>
+            <template lwc:if={error}>
+                caught an error: <br/>
+                {error}
+            </template>
+        </div>
+        <div slot="actions">
+            <lightning-input lwc:ref="includeCredentialsToggle"
+                type="toggle"
+                message-toggle-active="Include Credentials"
+                message-toggle-inactive="Omit Credentials"
+                value={includeCredentials}
+                disabled={listening}
+            ></lightning-input>
+            <lightning-button
+                label={startPauseLabel}
+                disabled={disableStartPauseButton}
+                icon-name={startPauseIconName}
+                onclick={toggleListeningOnClick}
+                class="slds-var-m-right_x-small"
+            ></lightning-button>
+            <lightning-button
+                disabled={disableClearButton}
+                label="Clear"
+                icon-name="utility:delete"
+                onclick={clearOnClick}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>
